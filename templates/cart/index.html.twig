@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CartController!
+{% endblock %}
+
+{% block body %}
+
+    <div class="bg-light p-3">
+        <h1>Votre panier</h1>
+    </div>
+
+    {% if items | length > 0 %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{% if item.product.title is defined %}
+                            {{ item.product.title }}
+                        {% else %}
+                            Error
+                        {% endif %}
+                    </td>
+                    <td>{% if item.product.price is defined %}
+                        {{ item.product.price }}
+                        {% else %}
+                            Error
+                        {% endif %}
+                    </td>
+                    <td>{% if item.quantity is defined %}
+                        {{ item.quantity }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.product.price is defined %}
+                            {% if item.quantity is defined %}
+                                {{ item.product.price * item.quantity }}
+                            {% endif %}
+                            {% else %}
+                                error
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.product.price is defined %}
+
+                        <a class="btn btn-danger btn-sm" href="{{ path('cart_remove', {'id': item.product.id}) }}">
+
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">Total : </td>
+                <td>{{ total }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                {#{% for item in items %}#}
+
+                <td colspan="2">Vider tout le panier : </td>
+                {#<td>{{ item.quantity }}</td>#}
+                <td>{{ totalQ }} Produits</td>
+                <td>{{ total }}</td>
+                <td>
+                    {% if item.product is defined %}
+
+                        <a class="btn btn-danger btn-sm" href="{{ path('cart_remove_all', {'id': item.product.id}) }}">
+
+                            <i class="fas fa-trash"></i>
+                        </a>
+
+                    {% endif %}
+
+                </td>
+            </tr>
+            {#{% endfor %}#}
+
+            </tfoot>
+        </table>
+
+    {% else %}
+
+    <p>Surprise, c'est vide !</p>
+
+    {% endif %}
+
+{% endblock %}
